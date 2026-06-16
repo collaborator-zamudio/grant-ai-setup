@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grant's AI Computer Setup Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --border2: #3a3a3a;
+    --text: #f0f0f0;
+    --text2: #a0a0a0;
+    --text3: #666;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.12);
+    --green-text: #86efac;
+    --blue: #3b82f6;
+    --blue-bg: rgba(59,130,246,0.12);
+    --blue-text: #93c5fd;
+    --amber: #f59e0b;
+    --amber-bg: rgba(245,158,11,0.12);
+    --amber-text: #fcd34d;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 3rem 1.5rem 2rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 1.75rem;
+  }
+
+  .progress-track {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .p-pip {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border2);
+  }
+
+  .p-pip.done { background: var(--green); }
+
+  .progress-label {
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  .section {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .section:hover { border-color: var(--border2); }
+  .section.open { border-color: var(--border2); }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    background: var(--surface);
+    user-select: none;
+    list-style: none;
+  }
+
+  .section-header::-webkit-details-marker { display: none; }
+
+  .section-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 15px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .b-green { background: var(--green-bg); color: var(--green-text); }
+  .b-blue  { background: var(--blue-bg);  color: var(--blue-text); }
+  .b-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .b-gray  { background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); }
+
+  .chevron {
+    color: var(--text3);
+    font-size: 12px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  details[open] .chevron { transform: rotate(180deg); }
+  details[open] .section-header { background: var(--surface2); }
+
+  .section-body {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .callout {
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .callout-green { background: var(--green-bg); color: var(--green-text); border: 1px solid rgba(34,197,94,0.2); }
+  .callout-amber { background: var(--amber-bg); color: var(--amber-text); border: 1px solid rgba(245,158,11,0.2); }
+
+  .callout strong { font-weight: 600; }
+
+  .steps { list-style: none; }
+
+  .step {
+    display: flex;
+    gap: 11px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--blue-bg);
+    color: var(--blue-text);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    flex-shrink: 0;
+    border: 1px solid rgba(59,130,246,0.2);
+  }
+
+  .step-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.55;
+  }
+
+  .step-text strong {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--text2);
+    border-left: 2px solid var(--border2);
+    padding: 6px 10px;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 2px 7px;
+    color: var(--text2);
+  }
+
+  footer {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 1.5rem 2rem;
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  @media (max-width: 500px) {
+    h1 { font-size: 1.35rem; }
+    .section-title { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Research brief · June 2026</p>
+  <h1>Grant's AI Computer Setup Plan</h1>
+  <p class="subtitle">A 7-part implementation roadmap covering hardware, agent setup, Notion, voice, email, contacts, and cloud architecture.</p>
+  <div class="progress-track">
+    <div class="p-pip done"></div>
+    <div class="p-pip done"></div>
+    <div class="p-pip"></div>
+    <div class="p-pip"></div>
+    <div class="p-pip"></div>
+    <div class="p-pip"></div>
+    <div class="p-pip"></div>
+  </div>
+  <p class="progress-label">Click each section to expand</p>
+</header>
+
+<main>
+
+  <!-- 1. Hardware -->
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">💻</div>
+      <span class="section-title">1. Hardware recommendation</span>
+      <span class="badge b-green">Buy now</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <div class="callout callout-green">
+        <strong>Recommendation: MacBook Air M5 (24GB RAM, 512GB SSD) — ~$1,299.</strong> Skip the MacBook Neo. It's an entry-level budget model for students, with only 8GB RAM — not suitable for running AI agents. The Air M5 is the sweet spot for cloud-connected AI workflows.
+      </div>
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>RAM is the #1 spec.</strong> 16GB is the minimum; 24GB is the future-proof choice for running local models and parallel agents. 8GB (Neo) will bottleneck immediately.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>M5 chip advantage:</strong> Every GPU core has a dedicated Neural Accelerator — 4× faster AI compute than M4. Whisper voice transcription runs in under 400ms locally on M5 Apple Silicon.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Desktop alternative:</strong> Mac mini M4 Pro (48GB) at ~$1,799 is the best AI workstation per dollar — faster, more RAM, stays at a desk paired with any monitor.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Storage:</strong> 512GB minimum. Agents, local models, and filesystem access all grow fast. 1TB if budget allows.</div></li>
+      </ul>
+      <p class="note">The MacBook Neo (A18 Pro, $599) is Apple's budget laptop for students — 8GB RAM, no MagSafe, no Thunderbolt, and does not meet Adobe's RAM recommendations. It is not the right machine for this use case.</p>
+    </div>
+  </details>
+
+  <!-- 2. Agent setup -->
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">🤖</div>
+      <span class="section-title">2. Agent setup — Claude &amp; Gemini on Mac</span>
+      <span class="badge b-blue">Setup steps</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Install Claude Desktop</strong> from claude.com/download. Sign in with a paid plan (Pro at $20/mo minimum). This gives access to Chat, Cowork, and Code modes in one app.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Enable Claude Cowork</strong> (Anthropic's non-technical desktop agent, launched Jan 2026). In the app, click the "Cowork" tab → check "Work in a Folder" → select a folder. Claude will autonomously plan and execute multi-step tasks on files in that folder.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Filesystem access via MCP:</strong> The Filesystem MCP Server (officially supported) lets Claude read, write, and organize local files. Configure it in Claude Desktop settings — you control exactly which folders are accessible. Over 9,400 MCP servers now exist covering email, databases, calendar, and more.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Email access:</strong> Connect Claude to Gmail or Outlook via MCP server. For personal email, the Gmail MCP server allows Claude to read, draft, and send on Grant's behalf. Grant must authorize OAuth access during setup.</div></li>
+        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Gemini:</strong> Use Google's Gemini app (gemini.google.com) or Gemini CLI for agent tasks. Gemini is strongest when deeply integrated with Google Workspace (Gmail, Drive, Docs).</div></li>
+      </ul>
+      <div class="callout callout-amber" style="margin-top:14px; margin-bottom:0;">
+        <strong>Security note:</strong> Grant AI agents access to folders/email in stages, not all at once. Start with a single test folder. Limit permissions incrementally as trust is established.
+      </div>
+      <div class="tags">
+        <span class="tag">Claude Desktop</span>
+        <span class="tag">Claude Cowork</span>
+        <span class="tag">Filesystem MCP</span>
+        <span class="tag">Gmail MCP</span>
+        <span class="tag">Claude Pro ($20/mo)</span>
+      </div>
+    </div>
+  </details>
+
+  <!-- 3. Notion -->
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">◻️</div>
+      <span class="section-title">3. Notion as AI agent platform</span>
+      <span class="badge b-green">Already using</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <div class="callout callout-green">
+        <strong>Notion is a strong hub for this setup.</strong> With the September 2025 launch of Notion 3.0 (built-in AI agent), the May 2026 Developer Platform (external agent integration, Workers, database sync), and Notion Mail, it's evolved into a capable personal operating system.
+      </div>
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Notion AI agent (v3.0):</strong> Activate from any Notion page. The built-in agent can search across your workspace, summarize pages, create database entries, and run multi-step tasks — no additional setup required on a paid plan.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Connect Claude Code to Notion:</strong> As of May 2026, Notion's Developer Platform supports direct external agent integration — Claude Code can be assigned tasks and tracked inside Notion workspaces. This lets Grant kick off Claude tasks from within Notion and see results logged there.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Notion as CRM + contacts hub:</strong> Build a People database in Notion (name, email, company, relationship notes, last contacted). This becomes the enriched contacts layer fed from the iCloud export in step 6.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Notion Mail:</strong> Launched April 2025 as a Gmail-based email client with AI integration — draft replies, schedule meetings, and search across messages, all inside Notion.</div></li>
+        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Database Sync (May 2026):</strong> Notion can now pull live data from external sources directly into Notion databases. Useful later if Grant's contact enrichment or CRM data lives in other tools.</div></li>
+        <li class="step"><div class="step-num">6</div><div class="step-text"><strong>Superwhisper + Notion:</strong> Superwhisper works system-wide, so Grant can dictate notes, tasks, and meeting summaries directly into any Notion page via voice — no typing required.</div></li>
+      </ul>
+      <div class="tags">
+        <span class="tag">Notion AI (v3.0)</span>
+        <span class="tag">Notion Mail</span>
+        <span class="tag">Notion Developer Platform</span>
+        <span class="tag">Claude Code ↔ Notion</span>
+        <span class="tag">Notion Workers</span>
+      </div>
+    </div>
+  </details>
+
+  <!-- 4. Voice -->
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">🎙️</div>
+      <span class="section-title">4. Whisper Voice integration</span>
+      <span class="badge b-blue">Setup steps</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <div class="callout callout-green">
+        <strong>Recommended app: Superwhisper.</strong> The leading Whisper-based voice input layer for Mac. Runs entirely on-device (no audio leaves the machine), works system-wide in any app including Claude Desktop and Notion, and has official integrations with Claude Code as of 2026.
+      </div>
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>What Whisper is:</strong> OpenAI's open-source speech recognition model. Apps like Superwhisper package it as a native Mac tool, converting voice to text in any app — email, Claude, Notion, Slack — in under 400ms on Apple Silicon.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Install Superwhisper</strong> (superwhisper.app). Pricing: $8.49/month or $249 lifetime. Set a hotkey (or mouse button) to activate dictation from any app.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Create custom modes</strong> for Grant's workflows: an "Email" mode that polishes spoken drafts, a "Claude prompt" mode that formats voice input as a precise instruction, and a "Notes" mode for quick capture into Notion.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Claude Code integration:</strong> Superwhisper has a native Claude Code mode (added 2026). Grant can dictate coding tasks or agent instructions directly into the Claude terminal.</div></li>
+        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Alternative — Wispr Flow:</strong> More of a "cloud polish" approach. Better for prose writing; Superwhisper is better for precision commands and technical workflows.</div></li>
+      </ul>
+      <div class="tags">
+        <span class="tag">Superwhisper (~$8.49/mo)</span>
+        <span class="tag">Wispr Flow (alternative)</span>
+        <span class="tag">Works in any Mac app</span>
+        <span class="tag">100% on-device</span>
+      </div>
+    </div>
+  </details>
+
+  <!-- 5. Email -->
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">✉️</div>
+      <span class="section-title">5. Work email separation (Exchange → web)</span>
+      <span class="badge b-green">Quick win</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Remove Microsoft Outlook</strong> (or Apple Mail's Exchange account) from the personal Mac. This frees the machine from work credentials entirely.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Access work Exchange via browser:</strong> Go to outlook.office.com. All Exchange email, calendar, and contacts are accessible without any desktop client. Works in Safari or Chrome.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Create a dedicated browser profile</strong> for work — keeps work cookies/sessions separate from personal browsing and prevents cross-contamination with personal AI agents.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Personal email client stays native:</strong> Use Apple Mail or Mimestream (Gmail-native Mac app) for personal email. This is the account Claude agents get access to — not work Exchange.</div></li>
+        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Optionally use Notion Mail</strong> for personal email — Gmail-based with built-in AI to draft replies, summarize threads, and schedule meetings, all inside Notion.</div></li>
+      </ul>
+      <p class="note">This is the fastest step in the whole plan. Takes under 30 minutes. Do this first — it cleanly separates the two environments before any agent setup begins.</p>
+    </div>
+  </details>
+
+  <!-- 6. Contacts -->
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">📇</div>
+      <span class="section-title">6. iCloud contacts → Notion pipeline</span>
+      <span class="badge b-blue">Setup steps</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Export from iCloud:</strong> Open Contacts.app on Mac → Select all (Cmd+A) → File → Export → Export vCard (.vcf file). This captures all contacts in a portable format.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Convert vCard to CSV:</strong> Use a free tool like vcf-to-csv.com or the macOS "Contacts" export to CSV option. Produces a spreadsheet with name, email, phone, and company fields.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Import to Notion:</strong> In Notion, create a new database → Import → CSV. Map columns to Notion properties (Name, Email, Phone, Company, Tags). This becomes Grant's personal CRM.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Deduplication and cleansing:</strong> Use SyncPenguin (syncpenguin.com) for ongoing two-way sync between iCloud Contacts and Notion. For a one-time cleanse, Claude Cowork can scan the Notion database and flag/merge duplicates.</div></li>
+        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Enrichment:</strong> Use Clay.com — connect it to the Notion database and it will auto-fill company info, LinkedIn URLs, job titles, and email addresses for contacts missing data.</div></li>
+        <li class="step"><div class="step-num">6</div><div class="step-text"><strong>Ongoing sync:</strong> SyncPenguin or Appy Pie Automate can keep iCloud and Notion in two-way sync — new contacts added on iPhone automatically appear in Notion, and vice versa.</div></li>
+      </ul>
+      <div class="tags">
+        <span class="tag">iCloud → vCard export</span>
+        <span class="tag">SyncPenguin (sync)</span>
+        <span class="tag">Clay.com (enrichment)</span>
+        <span class="tag">Notion CRM database</span>
+      </div>
+    </div>
+  </details>
+
+  <!-- 7. Cloud vs two-computer -->
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">☁️</div>
+      <span class="section-title">7. Cloud vs. two-computer model</span>
+      <span class="badge b-green">Recommendation</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <div class="callout callout-green">
+        <strong>Recommendation: Single Mac, cloud-first.</strong> One MacBook Air M5 with cloud AI (Claude, Gemini via APIs) as the primary agent layer. No local model downloads needed for Grant's use cases — Cowork, email, and Notion workflows all run cloud-side.
+      </div>
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Cloud-first model (recommended):</strong> Claude and Gemini run on Anthropic/Google's servers. The Mac is a lightweight interface and local compute layer. Fast setup, no large model downloads, and agents are always on the latest version.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Local model option (optional, later):</strong> If Grant wants offline AI or maximum privacy, Ollama + LM Studio let him run 7–14B parameter models locally on a 24GB M5 Mac. Not necessary at first — add later if needed.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Two-computer model — skip it:</strong> Adds complexity without clear benefit. The split between "documents computer" and "personal computer" creates sync headaches. Everything fits on one machine with proper folder structure.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Cloud storage:</strong> iCloud Drive handles filesystem backup. Use iCloud for Documents and Desktop. Claude agents get access to a designated local working folder that syncs to iCloud automatically.</div></li>
+      </ul>
+      <p class="note">The "desktop as AI compute layer, everything else in the cloud" model is exactly right. One Mac, cloud agents, cloud storage. Simple to maintain, easy to back up, and the Mac M5 has ample headroom if local AI is added later.</p>
+    </div>
+  </details>
+
+</main>
+
+<footer>
+  <p>Prepared June 2026 · Research brief for Grant's personal AI computer setup</p>
+</footer>
+
+</body>
+</html>
