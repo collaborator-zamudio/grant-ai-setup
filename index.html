@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grant's AI Computer Setup Plan</title>
+<title>AI Implementation Crash Course — Grant</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,6 +25,8 @@
     --amber: #f59e0b;
     --amber-bg: rgba(245,158,11,0.12);
     --amber-text: #fcd34d;
+    --purple-bg: rgba(168,85,247,0.12);
+    --purple-text: #d8b4fe;
     --radius: 10px;
     --radius-sm: 6px;
   }
@@ -38,421 +40,476 @@
     min-height: 100vh;
   }
 
-  header {
-    padding: 3rem 1.5rem 2rem;
-    max-width: 720px;
-    margin: 0 auto;
+  header { padding: 3rem 1.5rem 1.5rem; max-width: 720px; margin: 0 auto; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 0.75rem; }
+  h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.3; }
+  .subtitle { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; }
+
+  .partnav {
+    display: flex; gap: 8px; margin-bottom: 0.5rem; flex-wrap: wrap;
+  }
+  .part-chip {
+    font-size: 12px; padding: 5px 11px; border-radius: 20px; background: var(--surface2);
+    border: 1px solid var(--border2); color: var(--text2);
   }
 
-  .eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 0.75rem;
+  main { max-width: 720px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+
+  .part-divider {
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border2);
   }
-
-  h1 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
+  .part-divider .part-num {
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-text); font-weight: 600;
   }
+  .part-divider h2 { font-size: 1.25rem; font-weight: 600; margin-top: 4px; }
+  .part-divider p { font-size: 13px; color: var(--text2); margin-top: 4px; }
 
-  .subtitle {
-    font-size: 14px;
-    color: var(--text2);
-    margin-bottom: 1.75rem;
-  }
-
-  .progress-track {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 0.5rem;
-  }
-
-  .p-pip {
-    flex: 1;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--border2);
-  }
-
-  .p-pip.done { background: var(--green); }
-
-  .progress-label {
-    font-size: 12px;
-    color: var(--text3);
-  }
-
-  main {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 1.5rem 4rem;
-  }
-
-  .section {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 10px;
-    overflow: hidden;
-    transition: border-color 0.15s;
-  }
-
+  .section { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
   .section:hover { border-color: var(--border2); }
-  .section.open { border-color: var(--border2); }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 16px;
-    cursor: pointer;
-    background: var(--surface);
-    user-select: none;
-    list-style: none;
-  }
-
+  .section-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px; cursor: pointer; background: var(--surface); user-select: none; list-style: none; }
   .section-header::-webkit-details-marker { display: none; }
-
-  .section-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: var(--radius-sm);
-    background: var(--surface2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 15px;
-  }
-
-  .section-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    flex: 1;
-  }
-
-  .badge {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 9px;
-    border-radius: 20px;
-    white-space: nowrap;
-  }
-
+  .section-icon { width: 30px; height: 30px; border-radius: var(--radius-sm); background: var(--surface2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; }
+  .section-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
   .b-green { background: var(--green-bg); color: var(--green-text); }
-  .b-blue  { background: var(--blue-bg);  color: var(--blue-text); }
+  .b-blue { background: var(--blue-bg); color: var(--blue-text); }
   .b-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .b-gray  { background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); }
-
-  .chevron {
-    color: var(--text3);
-    font-size: 12px;
-    transition: transform 0.2s;
-    flex-shrink: 0;
-  }
-
+  .b-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .chevron { color: var(--text3); font-size: 12px; transition: transform 0.2s; flex-shrink: 0; }
   details[open] .chevron { transform: rotate(180deg); }
   details[open] .section-header { background: var(--surface2); }
+  .section-body { padding: 16px; border-top: 1px solid var(--border); background: var(--bg); }
 
-  .section-body {
-    padding: 16px;
-    border-top: 1px solid var(--border);
-    background: var(--bg);
-  }
-
-  .callout {
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    margin-bottom: 14px;
-    font-size: 14px;
-    line-height: 1.55;
-  }
-
+  .callout { border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px; font-size: 14px; line-height: 1.55; }
   .callout-green { background: var(--green-bg); color: var(--green-text); border: 1px solid rgba(34,197,94,0.2); }
   .callout-amber { background: var(--amber-bg); color: var(--amber-text); border: 1px solid rgba(245,158,11,0.2); }
-
+  .callout-blue { background: var(--blue-bg); color: var(--blue-text); border: 1px solid rgba(59,130,246,0.2); }
   .callout strong { font-weight: 600; }
 
   .steps { list-style: none; }
+  .step { display: flex; gap: 11px; margin-bottom: 12px; align-items: flex-start; }
+  .step-num { min-width: 22px; height: 22px; border-radius: 50%; background: var(--blue-bg); color: var(--blue-text); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 1px; flex-shrink: 0; border: 1px solid rgba(59,130,246,0.2); }
+  .step-text { font-size: 14px; line-height: 1.55; }
+  .step-text strong { font-weight: 500; }
 
-  .step {
-    display: flex;
-    gap: 11px;
-    margin-bottom: 12px;
-    align-items: flex-start;
-  }
+  .note { font-size: 13px; color: var(--text2); border-left: 2px solid var(--border2); padding: 6px 10px; margin-top: 10px; line-height: 1.5; }
 
-  .step-num {
-    min-width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--blue-bg);
-    color: var(--blue-text);
-    font-size: 11px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-    flex-shrink: 0;
-    border: 1px solid rgba(59,130,246,0.2);
-  }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag { font-size: 11px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 4px; padding: 2px 7px; color: var(--text2); }
 
-  .step-text {
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.55;
-  }
-
-  .step-text strong {
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .note {
-    font-size: 13px;
-    color: var(--text2);
-    border-left: 2px solid var(--border2);
-    padding: 6px 10px;
-    margin-top: 10px;
-    line-height: 1.5;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
-  }
-
-  .tag {
-    font-size: 11px;
+  .promptbox {
     background: var(--surface2);
     border: 1px solid var(--border2);
-    border-radius: 4px;
-    padding: 2px 7px;
-    color: var(--text2);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin: 10px 0;
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 12.5px;
+    color: var(--blue-text);
+    line-height: 1.6;
+    white-space: pre-wrap;
   }
 
-  footer {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 1.5rem 2rem;
-    font-size: 12px;
-    color: var(--text3);
-  }
+  .compare-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 13px; }
+  .compare-table th { text-align: left; padding: 8px 10px; color: var(--text2); font-weight: 500; border-bottom: 1px solid var(--border2); }
+  .compare-table td { padding: 9px 10px; border-bottom: 0.5px solid var(--border); vertical-align: top; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table .label { color: var(--text2); font-weight: 500; }
 
-  @media (max-width: 500px) {
-    h1 { font-size: 1.35rem; }
-    .section-title { font-size: 13px; }
+  .video-link {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    background: var(--surface2); border-radius: var(--radius-sm); margin-bottom: 8px;
+    font-size: 13px; border: 1px solid var(--border2);
   }
+  .video-link .vicon { font-size: 16px; }
+
+  footer { max-width: 720px; margin: 0 auto; padding: 0 1.5rem 2rem; font-size: 12px; color: var(--text3); }
 </style>
 </head>
 <body>
 
 <header>
-  <p class="eyebrow">Research brief · June 2026</p>
-  <h1>Grant's AI Computer Setup Plan</h1>
-  <p class="subtitle">A 7-part implementation roadmap covering hardware, agent setup, Notion, voice, email, contacts, and cloud architecture.</p>
-  <div class="progress-track">
-    <div class="p-pip done"></div>
-    <div class="p-pip done"></div>
-    <div class="p-pip"></div>
-    <div class="p-pip"></div>
-    <div class="p-pip"></div>
-    <div class="p-pip"></div>
-    <div class="p-pip"></div>
+  <p class="eyebrow">Crash course · June 2026</p>
+  <h1>AI Implementation Crash Course</h1>
+  <p class="subtitle">A practical walkthrough covering what you need, what AI agents can actually do, and how to set them up and prompt them — focused on Claude, Copilot, Gemini, and Notion.</p>
+  <div class="partnav">
+    <span class="part-chip">Part 1 — What you need</span>
+    <span class="part-chip">Part 2 — What it's capable of</span>
+    <span class="part-chip">Part 3 — Implementation</span>
+    <span class="part-chip">Appendix — Hardware comparison</span>
   </div>
-  <p class="progress-label">Click each section to expand</p>
 </header>
 
 <main>
 
-  <!-- 1. Hardware -->
-  <details class="section">
+  <!-- ============ PART 1 ============ -->
+  <div class="part-divider">
+    <p class="part-num">Part 1</p>
+    <h2>What do you need</h2>
+    <p>Computer ✓, subscription ✓, voice input, and what else fits the picture</p>
+  </div>
+
+  <details class="section" open>
     <summary class="section-header">
       <div class="section-icon">💻</div>
-      <span class="section-title">1. Hardware recommendation</span>
-      <span class="badge b-green">Buy now</span>
+      <span class="section-title">Computer + subscriptions — quick recap</span>
+      <span class="badge b-green">Already decided</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <ul class="steps">
+        <li class="step"><div class="step-num">✓</div><div class="step-text"><strong>Computer:</strong> MacBook Air M5, 24GB RAM, 512GB SSD. Confirmed in the prior research doc — handles cloud AI agents, Whisper dictation, and the iCloud-to-Notion pipeline natively.</div></li>
+        <li class="step"><div class="step-num">✓</div><div class="step-text"><strong>Claude subscription:</strong> Pro plan, $20/month. Required for Cowork (the autonomous agent mode) — the free tier only gives basic chat.</div></li>
+        <li class="step"><div class="step-num">○</div><div class="step-text"><strong>Whisper/voice:</strong> Superwhisper, ~$8.49/month or $249 lifetime. Covered in detail in Part 3 below — this is the piece still pending setup.</div></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">➕</div>
+      <span class="section-title">What else fits — the "other" category</span>
+      <span class="badge b-blue">Worth knowing</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <p style="margin-bottom: 12px;">A few additional things worth having in place before diving into Part 3, though none are urgent purchases:</p>
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Microsoft 365 personal/family plan</strong> (~$70/year) — needed for Copilot if Grant wants it inside Word, Excel, and Outlook rather than just the standalone Copilot app, which is free.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Google AI Pro</strong> (~$19.99/month) — needed for Gemini's deeper features in Gmail, Docs, and Drive. The free Gemini app at gemini.google.com works without this, but with more limited capability.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>A dedicated working folder</strong> on the Mac — this is software setup, not a purchase, but it's the single most important piece of "infrastructure" for getting good results from Claude Cowork. Covered fully in Part 3.</div></li>
+      </ul>
+      <p class="note">None of this needs to be bought today. Claude Pro alone is enough to start the crash course below — Copilot and Gemini access can be added once Grant sees how he wants to divide tasks between the three.</p>
+    </div>
+  </details>
+
+  <!-- ============ PART 2 ============ -->
+  <div class="part-divider">
+    <p class="part-num">Part 2</p>
+    <h2>What is it capable of doing &amp; how to think about using it</h2>
+    <p>Broad overview, AI vs. human judgment, and use cases with examples</p>
+  </div>
+
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">🧭</div>
+      <span class="section-title">The three tools, what each is actually for</span>
+      <span class="badge b-blue">Overview</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <table class="compare-table">
+        <tr><th>Tool</th><th>What it's best at</th><th>Where it lives</th></tr>
+        <tr>
+          <td class="label">Claude</td>
+          <td>Deep reasoning, long documents, file/folder agent work (Cowork), careful writing. Works on any file type, not tied to one ecosystem.</td>
+          <td>Desktop app, browser, or in Word/Excel/PowerPoint via add-in</td>
+        </tr>
+        <tr>
+          <td class="label">Copilot</td>
+          <td>Anything already inside Outlook, Word, Excel, Teams. Best when your files and email already live in Microsoft 365.</td>
+          <td>Built into Microsoft 365 apps and Windows itself</td>
+        </tr>
+        <tr>
+          <td class="label">Gemini</td>
+          <td>Anything inside Gmail, Docs, Sheets, Drive, Meet. Best for Google-ecosystem tasks and meeting notes.</td>
+          <td>gemini.google.com, or built into Google Workspace apps</td>
+        </tr>
+        <tr>
+          <td class="label">Notion</td>
+          <td>The hub that ties everything together — databases (contacts, CRM, tasks), notes, and its own built-in AI agent that can search across your whole workspace and create entries. Best for anything that needs a persistent, organized home rather than a one-off task.</td>
+          <td>Desktop app, browser, or mobile — notion.so</td>
+        </tr>
+      </table>
+      <p class="note">For Grant's setup specifically: Claude is the primary agent (handles the personal email/filesystem work), Notion is the organizing layer underneath everything (contacts database, notes, task tracking), Copilot stays mostly on the work-Exchange side if useful there, and Gemini is optional — worth trying if Grant ends up with meeting notes or Google Docs in the mix.</p>
+    </div>
+  </details>
+
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">⚖️</div>
+      <span class="section-title">When to use AI vs. when to do it yourself</span>
+      <span class="badge b-amber">Judgment call</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Good fit for AI:</strong> repetitive organizing (sorting files, renaming, tagging contacts), first drafts of emails or documents, summarizing long threads or PDFs, research that would take you an hour of searching.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Keep it human:</strong> anything where a wrong answer is costly and hard to verify — financial decisions, anything sent externally without review, decisions about people (hiring, sensitive conversations).</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>The honest middle ground:</strong> AI drafts, you approve. This is the default mode for Cowork — it proposes a plan, shows its work, and waits for confirmation on anything that deletes or sends something. Treat the first output as a draft, not a final answer, until you've used a given workflow enough times to trust it.</div></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">📋</div>
+      <span class="section-title">Use cases with real examples</span>
+      <span class="badge b-blue">Worked examples</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <div class="callout callout-blue">
+        <strong>Example 1 — Contact cleanup (Claude Cowork).</strong> You ask Claude to scan a folder containing your exported iCloud contacts CSV and flag duplicates. Claude reads the file, identifies near-duplicate entries (same person, slightly different spelling or missing fields), and produces a cleaned version plus a log of what it merged — without you opening the spreadsheet once.
+      </div>
+      <div class="callout callout-blue">
+        <strong>Example 2 — Inbox triage (any of the three).</strong> You ask the agent to read your last 20 unread emails and summarize anything that needs a reply this week, grouped by urgency. You stay in control of what actually gets sent — the agent's job is surfacing what matters, not sending replies unsupervised.
+      </div>
+      <div class="callout callout-blue">
+        <strong>Example 3 — Research and synthesis (Claude or Gemini).</strong> You ask for a comparison of two service providers, with pricing and pros/cons pulled from their websites, delivered as a short table. This is the same kind of task this crash course itself was built from.
+      </div>
+      <p class="note">Notice the pattern across all three: you give a clear goal and a clear boundary (what file, what folder, what it shouldn't touch), and the agent does the legwork. The next section shows exactly how to phrase that.</p>
+    </div>
+  </details>
+
+  <!-- ============ PART 3 ============ -->
+  <div class="part-divider">
+    <p class="part-num">Part 3</p>
+    <h2>Implementation — setup, prompting, and structure</h2>
+    <p>What to install, how to structure inputs, and the framework for prompting</p>
+  </div>
+
+  <details class="section" open>
+    <summary class="section-header">
+      <div class="section-icon">⚙️</div>
+      <span class="section-title">Step 1 — Install and activate Claude Cowork</span>
+      <span class="badge b-green">Start here</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div class="step-text">Go to <strong>claude.com/download</strong>, download Claude Desktop for Mac, install it, and sign in with the Pro account.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text">In the app, find the mode selector at the top — <strong>Chat</strong>, <strong>Cowork</strong>, and <strong>Code</strong>. Click <strong>Cowork</strong>.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text">On first run, Cowork downloads a small virtual machine (~2GB) that it works inside of — this is a safety feature, isolating what it does from the rest of the Mac. Let it finish before continuing.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text">When prompted to select a folder, do not point it at the whole Documents folder or home directory. Create a new, dedicated folder first — covered next.</div></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="section" open>
+    <summary class="section-header">
+      <div class="section-icon">📁</div>
+      <span class="section-title">Step 2 — Build the folder structure</span>
+      <span class="badge b-green">Most important step</span>
       <span class="chevron">▾</span>
     </summary>
     <div class="section-body">
       <div class="callout callout-green">
-        <strong>Recommendation: MacBook Air M5 (24GB RAM, 512GB SSD) — ~$1,299.</strong> Skip the MacBook Neo. It's an entry-level budget model for students, with only 8GB RAM — not suitable for running AI agents. The Air M5 is the sweet spot for cloud-connected AI workflows.
+        <strong>This is the single biggest lever for getting good results.</strong> Cowork performs poorly when it starts from zero every session. The fix is giving it a small set of files it reads automatically — your context, your rules, your way of working — before it touches anything.
       </div>
+      <p style="margin-bottom: 10px; font-weight: 500; font-size: 13px;">Recommended structure — create this on the Desktop or in Documents:</p>
+      <div class="promptbox">Claude-Work/
+├── context/
+│   └── about-me.md       (who you are, how you write, what to avoid)
+├── system/
+│   └── rules.md          (things Claude should never do without asking)
+├── projects/
+│   ├── contacts-cleanup/
+│   ├── email-triage/
+│   └── notion-sync/
+└── outputs/               (where finished work lands)</div>
       <ul class="steps">
-        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>RAM is the #1 spec.</strong> 16GB is the minimum; 24GB is the future-proof choice for running local models and parallel agents. 8GB (Neo) will bottleneck immediately.</div></li>
-        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>M5 chip advantage:</strong> Every GPU core has a dedicated Neural Accelerator — 4× faster AI compute than M4. Whisper voice transcription runs in under 400ms locally on M5 Apple Silicon.</div></li>
-        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Desktop alternative:</strong> Mac mini M4 Pro (48GB) at ~$1,799 is the best AI workstation per dollar — faster, more RAM, stays at a desk paired with any monitor.</div></li>
-        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Storage:</strong> 512GB minimum. Agents, local models, and filesystem access all grow fast. 1TB if budget allows.</div></li>
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>about-me.md:</strong> a short file (aim for under 2,000 words) describing who Grant is, his role, his tone preferences, and anything Claude should know before starting any task. Keep it tight — a long, rambling file actually hurts performance because Claude has to read through more noise.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>rules.md:</strong> the boundaries. Example: "Never delete a file without asking first." "Always ask before sending an email." "If something is ambiguous, ask rather than guess."</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>projects/:</strong> one subfolder per ongoing task. This keeps each project's files contained and lets Claude focus only on what's relevant to that task.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>outputs/:</strong> tell Claude explicitly to save finished work here. This makes it easy to find what it produced without digging through the project folders.</div></li>
       </ul>
-      <p class="note">The MacBook Neo (A18 Pro, $599) is Apple's budget laptop for students — 8GB RAM, no MagSafe, no Thunderbolt, and does not meet Adobe's RAM recommendations. It is not the right machine for this use case.</p>
     </div>
   </details>
 
-  <!-- 2. Agent setup -->
+  <details class="section" open>
+    <summary class="section-header">
+      <div class="section-icon">🌐</div>
+      <span class="section-title">Step 3 — Set Global Instructions</span>
+      <span class="badge b-green">5 minutes</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <p style="margin-bottom: 10px;">Global Instructions tell Claude how to behave in every Cowork session, regardless of which folder it's working in. Set this once in <strong>Settings → Cowork → Global Instructions</strong>.</p>
+      <p style="margin-bottom: 6px; font-weight: 500; font-size: 13px;">Starting template — paste this in and adjust as needed:</p>
+      <div class="promptbox">You are my working partner inside this workspace.
+
+Start by reading:
+1. context/about-me.md
+2. system/rules.md
+3. the relevant folder inside projects/
+
+Do not execute immediately if the goal, audience, or output
+format is unclear. Ask questions first when missing context
+could weaken the result.
+
+Do not invent facts, decisions, dates, numbers, or approvals.
+Make uncertainty visible.
+
+Save final outputs in outputs/.</div>
+      <p class="note">This single paragraph removes most of the vague, generic-feeling responses people complain about with Cowork. It gives Claude a starting behavior before any task-specific context arrives.</p>
+    </div>
+  </details>
+
   <details class="section">
     <summary class="section-header">
-      <div class="section-icon">🤖</div>
-      <span class="section-title">2. Agent setup — Claude &amp; Gemini on Mac</span>
-      <span class="badge b-blue">Setup steps</span>
+      <div class="section-icon">✍️</div>
+      <span class="section-title">Step 4 — The prompting framework: RTF</span>
+      <span class="badge b-purple">How to ask</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="section-body">
+      <div class="callout callout-blue">
+        <strong>The simplest framework that works almost every time: Role, Task, Format (RTF).</strong> You don't need anything more complicated than this for the vast majority of requests.
+      </div>
+      <ul class="steps">
+        <li class="step"><div class="step-num">R</div><div class="step-text"><strong>Role</strong> — what perspective should it take? ("You are organizing my contacts list" or just skip this for simple tasks — it's optional, not always needed.)</div></li>
+        <li class="step"><div class="step-num">T</div><div class="step-text"><strong>Task</strong> — the specific, concrete thing you want done. Vague: "clean up my contacts." Specific: "find duplicate contacts in contacts.csv and merge them, keeping the entry with the most complete information."</div></li>
+        <li class="step"><div class="step-num">F</div><div class="step-text"><strong>Format</strong> — what should the output look like? "Save the cleaned file as contacts-clean.csv in the same folder, and give me a short list of what you merged."</div></li>
+      </ul>
+      <p style="margin: 14px 0 8px; font-weight: 500; font-size: 13px;">A full example put together:</p>
+      <div class="promptbox">Find duplicate contacts in projects/contacts-cleanup/contacts.csv.
+A duplicate is the same person with a slightly different name
+spelling, missing phone number, or missing email. Merge each
+duplicate pair, keeping whichever entry has the most complete
+information. Save the result as contacts-clean.csv in the same
+folder. Give me a list of which entries you merged so I can
+spot-check them.</div>
+      <p class="note">Notice this prompt never says "you are an expert at..." — that's the Role piece, and it's genuinely optional for simple tasks. Add it back in for writing tasks where tone matters: "You are writing in my voice, casual but direct" changes the output meaningfully.</p>
+    </div>
+  </details>
+
+  <details class="section">
+    <summary class="section-header">
+      <div class="section-icon">🔒</div>
+      <span class="section-title">Step 5 — Permissions and safety defaults</span>
+      <span class="badge b-amber">Don't skip</span>
       <span class="chevron">▾</span>
     </summary>
     <div class="section-body">
       <ul class="steps">
-        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Install Claude Desktop</strong> from claude.com/download. Sign in with a paid plan (Pro at $20/mo minimum). This gives access to Chat, Cowork, and Code modes in one app.</div></li>
-        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Enable Claude Cowork</strong> (Anthropic's non-technical desktop agent, launched Jan 2026). In the app, click the "Cowork" tab → check "Work in a Folder" → select a folder. Claude will autonomously plan and execute multi-step tasks on files in that folder.</div></li>
-        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Filesystem access via MCP:</strong> The Filesystem MCP Server (officially supported) lets Claude read, write, and organize local files. Configure it in Claude Desktop settings — you control exactly which folders are accessible. Over 9,400 MCP servers now exist covering email, databases, calendar, and more.</div></li>
-        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Email access:</strong> Connect Claude to Gmail or Outlook via MCP server. For personal email, the Gmail MCP server allows Claude to read, draft, and send on Grant's behalf. Grant must authorize OAuth access during setup.</div></li>
-        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Gemini:</strong> Use Google's Gemini app (gemini.google.com) or Gemini CLI for agent tasks. Gemini is strongest when deeply integrated with Google Workspace (Gmail, Drive, Docs).</div></li>
+        <li class="step"><div class="step-num">1</div><div class="step-text">When Claude wants to do something irreversible (delete a file, send an email), it always asks first — this is a hard rule in Cowork, not optional behavior.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text">Only grant folder access to the dedicated Claude-Work folder, not your whole Documents directory or home folder. Copy files in that you want worked on, rather than pointing Claude at originals.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text">Check in early on longer tasks — glance at the first few steps Claude takes to confirm it understood the goal, rather than walking away and checking back an hour later.</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text">Watch for scope creep. Cowork occasionally does more than asked. If you see it heading somewhere unintended, redirect immediately rather than letting it compound.</div></li>
       </ul>
-      <div class="callout callout-amber" style="margin-top:14px; margin-bottom:0;">
-        <strong>Security note:</strong> Grant AI agents access to folders/email in stages, not all at once. Start with a single test folder. Limit permissions incrementally as trust is established.
-      </div>
-      <div class="tags">
-        <span class="tag">Claude Desktop</span>
-        <span class="tag">Claude Cowork</span>
-        <span class="tag">Filesystem MCP</span>
-        <span class="tag">Gmail MCP</span>
-        <span class="tag">Claude Pro ($20/mo)</span>
-      </div>
     </div>
   </details>
 
-  <!-- 3. Notion -->
   <details class="section">
     <summary class="section-header">
-      <div class="section-icon">◻️</div>
-      <span class="section-title">3. Notion as AI agent platform</span>
-      <span class="badge b-green">Already using</span>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="section-body">
-      <div class="callout callout-green">
-        <strong>Notion is a strong hub for this setup.</strong> With the September 2025 launch of Notion 3.0 (built-in AI agent), the May 2026 Developer Platform (external agent integration, Workers, database sync), and Notion Mail, it's evolved into a capable personal operating system.
-      </div>
-      <ul class="steps">
-        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Notion AI agent (v3.0):</strong> Activate from any Notion page. The built-in agent can search across your workspace, summarize pages, create database entries, and run multi-step tasks — no additional setup required on a paid plan.</div></li>
-        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Connect Claude Code to Notion:</strong> As of May 2026, Notion's Developer Platform supports direct external agent integration — Claude Code can be assigned tasks and tracked inside Notion workspaces. This lets Grant kick off Claude tasks from within Notion and see results logged there.</div></li>
-        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Notion as CRM + contacts hub:</strong> Build a People database in Notion (name, email, company, relationship notes, last contacted). This becomes the enriched contacts layer fed from the iCloud export in step 6.</div></li>
-        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Notion Mail:</strong> Launched April 2025 as a Gmail-based email client with AI integration — draft replies, schedule meetings, and search across messages, all inside Notion.</div></li>
-        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Database Sync (May 2026):</strong> Notion can now pull live data from external sources directly into Notion databases. Useful later if Grant's contact enrichment or CRM data lives in other tools.</div></li>
-        <li class="step"><div class="step-num">6</div><div class="step-text"><strong>Superwhisper + Notion:</strong> Superwhisper works system-wide, so Grant can dictate notes, tasks, and meeting summaries directly into any Notion page via voice — no typing required.</div></li>
-      </ul>
-      <div class="tags">
-        <span class="tag">Notion AI (v3.0)</span>
-        <span class="tag">Notion Mail</span>
-        <span class="tag">Notion Developer Platform</span>
-        <span class="tag">Claude Code ↔ Notion</span>
-        <span class="tag">Notion Workers</span>
-      </div>
-    </div>
-  </details>
-
-  <!-- 4. Voice -->
-  <details class="section">
-    <summary class="section-header">
-      <div class="section-icon">🎙️</div>
-      <span class="section-title">4. Whisper Voice integration</span>
-      <span class="badge b-blue">Setup steps</span>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="section-body">
-      <div class="callout callout-green">
-        <strong>Recommended app: Superwhisper.</strong> The leading Whisper-based voice input layer for Mac. Runs entirely on-device (no audio leaves the machine), works system-wide in any app including Claude Desktop and Notion, and has official integrations with Claude Code as of 2026.
-      </div>
-      <ul class="steps">
-        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>What Whisper is:</strong> OpenAI's open-source speech recognition model. Apps like Superwhisper package it as a native Mac tool, converting voice to text in any app — email, Claude, Notion, Slack — in under 400ms on Apple Silicon.</div></li>
-        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Install Superwhisper</strong> (superwhisper.app). Pricing: $8.49/month or $249 lifetime. Set a hotkey (or mouse button) to activate dictation from any app.</div></li>
-        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Create custom modes</strong> for Grant's workflows: an "Email" mode that polishes spoken drafts, a "Claude prompt" mode that formats voice input as a precise instruction, and a "Notes" mode for quick capture into Notion.</div></li>
-        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Claude Code integration:</strong> Superwhisper has a native Claude Code mode (added 2026). Grant can dictate coding tasks or agent instructions directly into the Claude terminal.</div></li>
-        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Alternative — Wispr Flow:</strong> More of a "cloud polish" approach. Better for prose writing; Superwhisper is better for precision commands and technical workflows.</div></li>
-      </ul>
-      <div class="tags">
-        <span class="tag">Superwhisper (~$8.49/mo)</span>
-        <span class="tag">Wispr Flow (alternative)</span>
-        <span class="tag">Works in any Mac app</span>
-        <span class="tag">100% on-device</span>
-      </div>
-    </div>
-  </details>
-
-  <!-- 5. Email -->
-  <details class="section">
-    <summary class="section-header">
-      <div class="section-icon">✉️</div>
-      <span class="section-title">5. Work email separation (Exchange → web)</span>
-      <span class="badge b-green">Quick win</span>
+      <div class="section-icon">🟦</div>
+      <span class="section-title">Quick notes — Copilot, Gemini, and Notion setup</span>
+      <span class="badge b-blue">If/when needed</span>
       <span class="chevron">▾</span>
     </summary>
     <div class="section-body">
       <ul class="steps">
-        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Remove Microsoft Outlook</strong> (or Apple Mail's Exchange account) from the personal Mac. This frees the machine from work credentials entirely.</div></li>
-        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Access work Exchange via browser:</strong> Go to outlook.office.com. All Exchange email, calendar, and contacts are accessible without any desktop client. Works in Safari or Chrome.</div></li>
-        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Create a dedicated browser profile</strong> for work — keeps work cookies/sessions separate from personal browsing and prevents cross-contamination with personal AI agents.</div></li>
-        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Personal email client stays native:</strong> Use Apple Mail or Mimestream (Gmail-native Mac app) for personal email. This is the account Claude agents get access to — not work Exchange.</div></li>
-        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Optionally use Notion Mail</strong> for personal email — Gmail-based with built-in AI to draft replies, summarize threads, and schedule meetings, all inside Notion.</div></li>
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Copilot:</strong> no separate install needed if Grant already has Microsoft 365 — Copilot appears automatically inside Word, Excel, Outlook, and Teams as an icon in the ribbon. The same RTF prompting framework applies directly inside those apps.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Gemini:</strong> go to gemini.google.com and sign in with a Google account — works immediately for free, with deeper Workspace integration (side panels inside Gmail/Docs) available on a paid Google AI plan.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Notion:</strong> sign in at notion.so (Grant already uses this). Its built-in AI agent activates from any page — no separate setup. The main task here isn't installing anything, it's building the People/Contacts database that the iCloud export feeds into (covered in the original setup plan).</div></li>
+        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>The honest divide:</strong> use whichever tool already lives where your files live. Don't force a single tool to do everything — Claude for the personal filesystem/email work, Notion as the organized home for contacts/notes/tasks, Copilot if work tasks stay in Microsoft apps, Gemini if Google Docs or Gmail enters the picture.</div></li>
       </ul>
-      <p class="note">This is the fastest step in the whole plan. Takes under 30 minutes. Do this first — it cleanly separates the two environments before any agent setup begins.</p>
     </div>
   </details>
 
-  <!-- 6. Contacts -->
   <details class="section">
     <summary class="section-header">
-      <div class="section-icon">📇</div>
-      <span class="section-title">6. iCloud contacts → Notion pipeline</span>
-      <span class="badge b-blue">Setup steps</span>
+      <div class="section-icon">🎬</div>
+      <span class="section-title">Video resources (search terms to find current tutorials)</span>
+      <span class="badge b-blue">Self-paced learning</span>
       <span class="chevron">▾</span>
     </summary>
     <div class="section-body">
-      <ul class="steps">
-        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Export from iCloud:</strong> Open Contacts.app on Mac → Select all (Cmd+A) → File → Export → Export vCard (.vcf file). This captures all contacts in a portable format.</div></li>
-        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Convert vCard to CSV:</strong> Use a free tool like vcf-to-csv.com or the macOS "Contacts" export to CSV option. Produces a spreadsheet with name, email, phone, and company fields.</div></li>
-        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Import to Notion:</strong> In Notion, create a new database → Import → CSV. Map columns to Notion properties (Name, Email, Phone, Company, Tags). This becomes Grant's personal CRM.</div></li>
-        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Deduplication and cleansing:</strong> Use SyncPenguin (syncpenguin.com) for ongoing two-way sync between iCloud Contacts and Notion. For a one-time cleanse, Claude Cowork can scan the Notion database and flag/merge duplicates.</div></li>
-        <li class="step"><div class="step-num">5</div><div class="step-text"><strong>Enrichment:</strong> Use Clay.com — connect it to the Notion database and it will auto-fill company info, LinkedIn URLs, job titles, and email addresses for contacts missing data.</div></li>
-        <li class="step"><div class="step-num">6</div><div class="step-text"><strong>Ongoing sync:</strong> SyncPenguin or Appy Pie Automate can keep iCloud and Notion in two-way sync — new contacts added on iPhone automatically appear in Notion, and vice versa.</div></li>
-      </ul>
-      <div class="tags">
-        <span class="tag">iCloud → vCard export</span>
-        <span class="tag">SyncPenguin (sync)</span>
-        <span class="tag">Clay.com (enrichment)</span>
-        <span class="tag">Notion CRM database</span>
-      </div>
+      <p style="margin-bottom: 12px; font-size: 13px; color: var(--text2);">Specific video links age out fast, so here are precise search terms that reliably surface current, well-reviewed walkthroughs as of mid-2026:</p>
+      <div class="video-link"><span class="vicon">▶️</span> "Claude Cowork setup tutorial 2026" — step-by-step installation and first session</div>
+      <div class="video-link"><span class="vicon">▶️</span> "Claude Cowork folder structure" — the about-me / rules / projects system in practice</div>
+      <div class="video-link"><span class="vicon">▶️</span> "RTF prompting framework examples" — short explainer videos on Role-Task-Format</div>
+      <div class="video-link"><span class="vicon">▶️</span> "Superwhisper Mac setup tutorial" — installing and configuring voice modes</div>
+      <div class="video-link"><span class="vicon">▶️</span> "Microsoft Copilot in Word and Excel tutorial 2026" — practical walkthroughs inside Office apps</div>
+      <div class="video-link"><span class="vicon">▶️</span> "Gemini in Gmail and Google Docs tutorial 2026" — setting up and using Gemini inside Google Workspace</div>
+      <div class="video-link"><span class="vicon">▶️</span> "Notion AI agent tutorial 2026" — using Notion's built-in AI to automate tasks and manage databases</div>
+      <p class="note">If a paid tutorial is preferred, Anthropic and most major Claude educators run live workshops (search "Claude Cowork workshop") that walk through building a working agent on your real inbox and files in a few hours — useful if Grant wants guided, hands-on setup rather than self-paced video.</p>
     </div>
   </details>
+  <!-- ============ APPENDIX ============ -->
+  <div class="part-divider">
+    <p class="part-num">Appendix</p>
+    <h2>Hardware comparison — MacBook Air M5 vs. Lenovo</h2>
+    <p>Why the Mac is still the right call, even though the Lenovo wins on paper specs</p>
+  </div>
 
-  <!-- 7. Cloud vs two-computer -->
-  <details class="section">
+  <details class="section" open>
     <summary class="section-header">
-      <div class="section-icon">☁️</div>
-      <span class="section-title">7. Cloud vs. two-computer model</span>
-      <span class="badge b-green">Recommendation</span>
+      <div class="section-icon">⚡</div>
+      <span class="section-title">MacBook Air M5 vs. Lenovo Yoga Slim 7x (Snapdragon X2 Elite)</span>
+      <span class="badge b-green">Resolved</span>
       <span class="chevron">▾</span>
     </summary>
     <div class="section-body">
       <div class="callout callout-green">
-        <strong>Recommendation: Single Mac, cloud-first.</strong> One MacBook Air M5 with cloud AI (Claude, Gemini via APIs) as the primary agent layer. No local model downloads needed for Grant's use cases — Cowork, email, and Notion workflows all run cloud-side.
+        <strong>Recommendation: stick with the MacBook Air M5.</strong> On raw NPU throughput, Qualcomm's Snapdragon X2 Elite chip is genuinely faster, but that gap doesn't translate into a better experience for Grant's actual workflow — cloud-based agents and Whisper-based dictation — rather than large local model inference.
       </div>
+
+      <table class="compare-table">
+        <tr>
+          <th>Category</th>
+          <th>MacBook Air M5</th>
+          <th>Lenovo Yoga Slim 7x (Snapdragon X2 Elite)</th>
+        </tr>
+        <tr>
+          <td class="label">NPU / AI TOPS</td>
+          <td>~38 TOPS (16-core Neural Engine)</td>
+          <td style="color: var(--green-text); font-weight: 500;">80 TOPS (Hexagon NPU) — wins on raw throughput</td>
+        </tr>
+        <tr>
+          <td class="label">AI benchmark score</td>
+          <td>~57,000 (Geekbench AI)</td>
+          <td style="color: var(--green-text); font-weight: 500;">~88,600 (Geekbench AI) — wins decisively</td>
+        </tr>
+        <tr>
+          <td class="label">Max RAM</td>
+          <td>32GB ceiling</td>
+          <td style="color: var(--green-text); font-weight: 500;">Up to 32GB on this model (some Windows machines go to 128GB) — matters only for large local models</td>
+        </tr>
+        <tr>
+          <td class="label">Claude Desktop + Cowork</td>
+          <td style="color: var(--green-text); font-weight: 500;">Native, mature, day-one support</td>
+          <td>Full feature parity as of Feb 2026, but newer and requires enabling Hyper-V/VM Platform manually</td>
+        </tr>
+        <tr>
+          <td class="label">App compatibility</td>
+          <td style="color: var(--green-text); font-weight: 500;">No emulation; native macOS apps</td>
+          <td>ARM (Windows on Snapdragon) still needs Prism emulation for non-native x86 apps — 15-30% slower</td>
+        </tr>
+        <tr>
+          <td class="label">Battery life</td>
+          <td>Strong, all-day</td>
+          <td style="color: var(--green-text); font-weight: 500;">Excellent — up to 25-29 hrs real-world, edges out the Air</td>
+        </tr>
+        <tr>
+          <td class="label">Price (comparable config)</td>
+          <td>~$1,299 (24GB/512GB)</td>
+          <td>~$1,599-1,699 (32GB/1TB, X2 Elite config)</td>
+        </tr>
+        <tr>
+          <td class="label">Ecosystem fit</td>
+          <td style="color: var(--green-text); font-weight: 500;">Native iCloud/Contacts.app integration — directly feeds the contacts pipeline</td>
+          <td>Would require extra steps to bridge iCloud data onto Windows</td>
+        </tr>
+      </table>
+
       <ul class="steps">
-        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Cloud-first model (recommended):</strong> Claude and Gemini run on Anthropic/Google's servers. The Mac is a lightweight interface and local compute layer. Fast setup, no large model downloads, and agents are always on the latest version.</div></li>
-        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Local model option (optional, later):</strong> If Grant wants offline AI or maximum privacy, Ollama + LM Studio let him run 7–14B parameter models locally on a 24GB M5 Mac. Not necessary at first — add later if needed.</div></li>
-        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Two-computer model — skip it:</strong> Adds complexity without clear benefit. The split between "documents computer" and "personal computer" creates sync headaches. Everything fits on one machine with proper folder structure.</div></li>
-        <li class="step"><div class="step-num">4</div><div class="step-text"><strong>Cloud storage:</strong> iCloud Drive handles filesystem backup. Use iCloud for Documents and Desktop. Claude agents get access to a designated local working folder that syncs to iCloud automatically.</div></li>
+        <li class="step"><div class="step-num">1</div><div class="step-text"><strong>Why the NPU gap doesn't matter here:</strong> the 80 vs 38 TOPS difference shows up mainly in local, on-device AI model inference — running large language models directly on the chip without internet. Grant's plan is built around cloud-hosted Claude and Gemini, where the heavy computation happens on Anthropic's and Google's servers, not the laptop's NPU.</div></li>
+        <li class="step"><div class="step-num">2</div><div class="step-text"><strong>Where Windows narrows the gap:</strong> Claude Cowork reached full feature parity on Windows in February 2026 — file access, MCP connectors, plugins, and multi-step task execution all work identically to macOS now. This removes what used to be the strongest argument for Mac.</div></li>
+        <li class="step"><div class="step-num">3</div><div class="step-text"><strong>Why Mac still wins for Grant specifically:</strong> the iCloud contacts export (Contacts.app → vCard) that feeds the Notion CRM pipeline is Apple-native. Recreating it on Windows would mean keeping an Apple device around just for that step, or relying on iCloud for Windows, which has historically been less reliable for Contacts sync.</div></li>
       </ul>
-      <p class="note">The "desktop as AI compute layer, everything else in the cloud" model is exactly right. One Mac, cloud agents, cloud storage. Simple to maintain, easy to back up, and the Mac M5 has ample headroom if local AI is added later.</p>
+
+      <p class="note">If Grant's plans expand later to include large local models (60B+ parameters) running entirely offline, the Snapdragon X2 Elite's higher RAM ceiling and TOPS would become a real advantage. For the current scope — cloud agents, voice input, Notion, contacts — that scenario isn't in play.</p>
     </div>
   </details>
 
 </main>
 
 <footer>
-  <p>Prepared June 2026 · Research brief for Grant's personal AI computer setup</p>
+  <p>Prepared June 2026 · AI implementation crash course for Grant, covering Claude, Copilot, Gemini, and Notion</p>
 </footer>
 
 </body>
